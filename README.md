@@ -1,6 +1,6 @@
 # Basic Graph in Rust
 
-Create Basic graph in `\*.ppm` files by Rust.
+Create Basic graph in `*.ppm` files by Rust.
 
 ## Quick Start
 

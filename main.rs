@@ -1,5 +1,5 @@
 use std::fs::File;
-use std::io::Write;
+use std::io::{BufWriter, Write};
 use std::path::Path;
 
 fn save_as_ppm(
@@ -8,7 +8,7 @@ fn save_as_ppm(
     height: usize,
     width: usize,
 ) -> std::io::Result<()> {
-    let mut file = File::create(file_path)?;
+    let mut file = BufWriter::new(File::create(file_path)?);
     file.write(format!("P6\n{width} {height} 255\n").as_str().as_bytes())?;
     for y in 0..height {
         for x in 0..width {
