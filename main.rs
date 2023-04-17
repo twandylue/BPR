@@ -94,6 +94,16 @@ fn fill_solid_circle(
     }
 }
 
+fn halo_circle(
+    pixels: &mut [u32],
+    height: usize,
+    width: usize,
+    foreground: u32,
+    background: u32,
+) {
+    todo!()
+}
+
 fn main() {
     const HEIGHT: usize = 16;
     const WIDTH: usize = 16;
@@ -121,4 +131,9 @@ fn main() {
     fill_solid_circle(&mut pixels, HEIGHT, WIDTH, FOREGROUND, BACKGROUND);
     save_as_ppm(Path::new("solid_circle.ppm"), &mut pixels, HEIGHT, WIDTH)
         .unwrap_or_else(|err| eprintln!("ERROR: could not save as ppm file: {err}"));
+
+    // TODO:
+    // halo_circle(&mut pixels, HEIGHT, WIDTH, FOREGROUND, BACKGROUND);
+    // save_as_ppm(Path::new("halo_circle.ppm"), &mut pixels, HEIGHT, WIDTH)
+    //     .unwrap_or_else(|err| eprintln!("ERROR: could not save as ppm file: {err}"));
 }
