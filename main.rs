@@ -76,14 +76,14 @@ fn fill_solid_circle(
     foreground: u32,
     background: u32,
 ) {
-    let cx = (width / 2) as i32;
-    let cy = (height / 2) as i32;
-    let r = (width / 2) as i32;
-
+    let radius = width / 2;
+    let r = (radius * 2) as i32;
+    let cx = ((width * 2) / 2) as i32;
+    let cy = ((height * 2) / 2) as i32;
     for y in 0..height {
         for x in 0..width {
-            let dx = x as i32 - cx;
-            let dy = y as i32 - cy;
+            let dx = cx - (x as i32 * 2 + 1);
+            let dy = cy - (y as i32 * 2 + 1);
 
             pixels[y * width + x] = if dx * dx + dy * dy <= r * r {
                 foreground
@@ -95,8 +95,8 @@ fn fill_solid_circle(
 }
 
 fn main() {
-    const HEIGHT: usize = 512;
-    const WIDTH: usize = 512;
+    const HEIGHT: usize = 16;
+    const WIDTH: usize = 16;
     const BACKGROUND: u32 = 0x000000;
     const FOREGROUND: u32 = 0xFF0000;
     let mut pixels = [0_u32; WIDTH * HEIGHT];
