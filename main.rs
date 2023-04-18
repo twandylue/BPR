@@ -71,12 +71,12 @@ fn checker_pattern(
 
 fn fill_solid_circle(
     pixels: &mut [u32],
+    radius: usize,
     height: usize,
     width: usize,
     foreground: u32,
     background: u32,
 ) {
-    let radius = width / 2;
     let r = (radius * 2) as i32;
     let cx = ((width * 2) / 2) as i32;
     let cy = ((height * 2) / 2) as i32;
@@ -128,7 +128,14 @@ fn main() {
     save_as_ppm(Path::new("checker_pattern.ppm"), &mut pixels, HEIGHT, WIDTH)
         .unwrap_or_else(|err| eprintln!("ERROR: could not save as ppm file: {err}"));
 
-    fill_solid_circle(&mut pixels, HEIGHT, WIDTH, FOREGROUND, BACKGROUND);
+    fill_solid_circle(
+        &mut pixels,
+        WIDTH / 2,
+        HEIGHT,
+        WIDTH,
+        FOREGROUND,
+        BACKGROUND,
+    );
     save_as_ppm(Path::new("solid_circle.ppm"), &mut pixels, HEIGHT, WIDTH)
         .unwrap_or_else(|err| eprintln!("ERROR: could not save as ppm file: {err}"));
 
