@@ -94,19 +94,56 @@ fn fill_solid_circle(
     }
 }
 
-fn halo_circle(
+// TODO: integer subpixel computation
+fn draw_halo_circle(
     pixels: &mut [u32],
+    radius: usize,
     height: usize,
     width: usize,
     foreground: u32,
     background: u32,
 ) {
-    todo!()
+    pixels.fill(background);
+
+    let w = width as f32;
+    let h = height as f32;
+    let r = radius as f32;
+    let cx = w / 2.0;
+    let cy = h / 2.0;
+    let mut x = 0.0;
+    let mut y = r - 0.5;
+
+    while x <= y {
+        let px = x + cx;
+        let py = y + cy;
+        if (0.0..w).contains(&px) && (0.0..h).contains(&py) {
+            assert!(width == height);
+            let dx = px as usize;
+            let dy = py as usize;
+
+            pixels[dy * width + dx] = foreground;
+            pixels[dx * height + dy] = foreground;
+
+            pixels[(height - dy) * width + dx] = foreground;
+            pixels[(height - dx) * height + dy] = foreground;
+
+            pixels[dy * width + (width - dx)] = foreground;
+            pixels[dx * height + (width - dy)] = foreground;
+
+            pixels[(height - dy) * width + (width - dx)] = foreground;
+            pixels[(height - dx) * height + (width - dy)] = foreground;
+        }
+
+        x += 1.0;
+        if x * x + y * y > r * r {
+            y -= 1.0;
+        }
+    }
 }
 
 fn main() {
-    const HEIGHT: usize = 16;
-    const WIDTH: usize = 16;
+    const HEIGHT: usize = 256;
+    const WIDTH: usize = 256;
     const BACKGROUND: u32 = 0x000000;
     const FOREGROUND: u32 = 0xFF0000;
     let mut pixels = [0_u32; WIDTH * HEIGHT];
@@ -130,7 +167,7 @@ fn main() {
 
     fill_solid_circle(
         &mut pixels,
-        WIDTH / 2,
+        WIDTH / 3,
         HEIGHT,
         WIDTH,
         FOREGROUND,
@@ -139,8 +176,14 @@ fn main() {
     save_as_ppm(Path::new("solid_circle.ppm"), &mut pixels, HEIGHT, WIDTH)
         .unwrap_or_else(|err| eprintln!("ERROR: could not save as ppm file: {err}"));
 
-    // TODO:
-    // halo_circle(&mut pixels, HEIGHT, WIDTH, FOREGROUND, BACKGROUND);
-    // save_as_ppm(Path::new("halo_circle.ppm"), &mut pixels, HEIGHT, WIDTH)
-    //     .unwrap_or_else(|err| eprintln!("ERROR: could not save as ppm file: {err}"));
+    draw_halo_circle(
+        &mut pixels,
+        WIDTH / 3,
+        HEIGHT,
+        WIDTH,
+        FOREGROUND,
+        BACKGROUND,
+    );
+    save_as_ppm(Path::new("halo_circle.ppm"), &mut pixels, HEIGHT, WIDTH)
+        .unwrap_or_else(|err| eprintln!("ERROR: could not save as ppm file: {err}"));
 }
